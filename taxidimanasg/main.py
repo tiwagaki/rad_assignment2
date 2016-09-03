@@ -18,23 +18,23 @@ import webapp2
 import urllib2
 import urllib
 import json
+from google.appengine.api import urlfetch
 
 url = 'http://datamall2.mytransport.sg/ltaodataservice/Taxi-Availability'
 
 #Autjentication parameters
-param = { 'AccountKey' : 'jmh3bT4mS0awdFDL6G6pSA==',
+headers = { 'AccountKey' : 'jmh3bT4mS0awdFDL6G6pSA==',
           'UniqueUserID' : '115dd78c-afb1-4eb3-88b1-44a194423d9b',
           'accept' : 'application/json'}
 
-encoded_param = urllib.urlencode(param)
-
-urlwithparam = url + '?' + encoded_param
-
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        #response = urllib2.urlopen(urlwithparam).read()
-        #data = json.loads(response)
-        self.response.write(urlwithparam)
+        result = urlfetch.fetch(
+            url = url,
+            method = urlfetch.GET,
+            headers = headers) 
+        json_result = json.loads(result.content)
+        self.response.write(json_result)
         
 
 app = webapp2.WSGIApplication([
