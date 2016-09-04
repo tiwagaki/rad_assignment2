@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+  <head>
+	<title>Geolocation</title>
+  </head>
+  <body>
+	<a href="#" id="get_location">Get location</a>
+	<div id="map">
+		<iframe id="google_map" width="600" height="450" 
+		frameborder="0" src="https://maps.google.com.sg?output=embed"></iframe>
+	</div>
+	
+	<script>
+	var c = function(pos) {
+		var lat    = pos.coords.latitude,
+			long   = pos.coords.longitude,
+			coords = lat + ',' + long;
+			
+		document.getElementById('google_map').setAttribute('src', 'https://maps.google.com.sg/?q=' + coords + '&z=15&output=embed');
+	}
+	
+	document.getElementById('get_location').onclick = function() {
+		navigator.geolocation.getCurrentPosition(c);
+		return false;
+	}
+	</script>
+	
+	<div id="list">
+		{% block bodycontent %}
+		<h1>Available Taxi Locations</h1>
+		<p>
+		<table>
+			<tr>
+				<th>Latitude</th>
+				<th>Longitude</th>
+			</tr>
+			{% for value in lati_longi %}
+			<tr>
+				<td>{{ value.Latitude }}</td>
+				<td>{{ value.Longitude }}</td>
+			</tr>
+			{% endfor %}
+		</table>
+		{% endblock %}
+	</div>
+	
+  </body>
+</html>
+{% endautoescape %}

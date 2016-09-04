@@ -19,22 +19,37 @@ import urllib2
 import urllib
 import json
 from google.appengine.api import urlfetch
+import jinja2
+import os
+
+JINJA_ENVIRONMENT = jinja2.Environment(
+    loader = jinja2.FileSystemLoader(os.path.dirname(__file__)),
+    extensions = ['jinja2.ext.autoescape'],
+    autoescape = True)
 
 url = 'http://datamall2.mytransport.sg/ltaodataservice/Taxi-Availability'
 
-#Autjentication parameters
 headers = { 'AccountKey' : 'jmh3bT4mS0awdFDL6G6pSA==',
           'UniqueUserID' : '115dd78c-afb1-4eb3-88b1-44a194423d9b',
           'accept' : 'application/json'}
 
 class MainHandler(webapp2.RequestHandler):
+    
     def get(self):
         result = urlfetch.fetch(
             url = url,
             method = urlfetch.GET,
             headers = headers) 
         json_result = json.loads(result.content)
-        self.response.write(json_result)
+        lati_longi = json_result['value']
+
+        template_variables = {
+            'lati_longi': lati_longi,
+
+        }
+
+        template = JINJA_ENVIRONMENT.get_template('index.html')
+        self.response.write(template.render(template_variables))
         
 
 app = webapp2.WSGIApplication([
