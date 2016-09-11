@@ -45,7 +45,6 @@ class MainHandler(webapp2.RequestHandler):
 
         template_variables = {
             'lati_longi': lati_longi,
-
         }
 
         template = JINJA_ENVIRONMENT.get_template('index.html')
