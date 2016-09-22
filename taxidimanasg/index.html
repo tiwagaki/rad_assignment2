@@ -37,30 +37,7 @@
 	}
 	</script>
 	-->
-	<h1>Your Current Location</h1>
-	<div id="maptwo"></div>
-    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?callback=initMapTwo">
-    </script>
-	
-	<script>
-	var maptwo;
-	function initMapTwo() {
-		navigator.geolocation.getCurrentPosition(success);
-		function success(pos) {
-			var currentLatLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-			maptwo = new google.maps.Map(document.getElementById('maptwo'), {
-				center: currentLatLng,
-				zoom: 15
-			});
-			var current_marker = new google.maps.Marker({
-			position: currentLatLng,
-			maptwo: maptwo
-			});
-			current_marker.setMap(maptwo);
-		}
-	}
-	</script>
+
 	
 	<h1>Available Taxi Locations</h1>
 	<div id="mapthree"></div>
@@ -69,6 +46,7 @@
     </script>
 	
 	<script>
+	var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
 	var mapthree;
 	var lati_longi = "{{ lati_longi|safe }}";
 	function initMapThree() {
@@ -79,10 +57,17 @@
 				center: currentLatLng,
 				zoom: 15
 			});
+			var current_marker = new google.maps.Marker({
+			position: currentLatLng,
+			map: mapthree,
+			
+			});
+			current_marker.setMap(mapthree);
 		{% for value in lati_longi %}
 			var marker = new google.maps.Marker({
 				position: new google.maps.LatLng("{{ value.Latitude }}", "{{ value.Longitude }}"),
-				mapthree: mapthree
+				mapthree: mapthree,
+				icon: image
 			});
 			marker.setMap(mapthree);
 		{% endfor %}
