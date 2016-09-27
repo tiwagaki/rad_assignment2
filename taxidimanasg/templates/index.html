@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+{% autoescape true %}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Your Taxi Locator</title>
+	<link href="/stylesheets/templatemo_style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<div id="templatemo_container">
+		<div id="templatemo_left_column">
+			<div id="templatemo_site_header">
+				<div id="site_logo">&nbsp;</div>
+				<div id="site_name">Search Cab<span></span></div>
+				<div id="site_slagon">Taxi search is Over</div>            
+			</div>
+        
+			<div class="templatemo_left_column_section">
+                <div class="left_column_header_01">Project Members </div>
+                <ul>
+                    <li>Kayen</li>
+                    <li>Lincoln</li>
+                    <li>Takuya</li>
+                    <li>Vick</li>
+                </ul>
+			</div>
+		</div>
+		
+		<div id="templatemo_right_column">
+        
+			<div id="templatemo_banner">
+				<div id="banner_content">
+					<div id="banner_title">Taxi Di Mana?</div>
+					<p>We Aspire to end your Taxi Search Struggles.</p>
+				</div>
+        
+			</div> <!-- end of banner -->
+        
+			<div id="templatemo_right_column_content">
+
+			<h1>Available Taxi Locations</h1>
+				<div id="mapthree"></div>
+			<script async defer
+				src="https://maps.googleapis.com/maps/api/js?callback=initMapThree">
+			</script>
+	
+			<script>
+				var image = '		https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+				var mapthree;
+				var lati_longi = "{{ lati_longi|safe }}";
+				
+				function initMapThree() {
+					navigator.geolocation.getCurrentPosition(success);
+					function success(pos) {
+						var currentLatLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+						mapthree = new google.maps.Map(document.getElementById('mapthree'), {
+						center: currentLatLng,
+						zoom: 15
+						});
+				
+						var current_marker = new google.maps.Marker({
+						position: currentLatLng,
+						map: mapthree,
+						});
+					
+						current_marker.setMap(mapthree);
+						{% for value in lati_longi %}
+							var marker = new google.maps.Marker({
+							position: new google.maps.LatLng("{{ value.Latitude }}", "{{ value.Longitude }}"),
+							mapthree: mapthree,
+							icon: image
+							});
+							marker.setMap(mapthree);
+						{% endfor %}
+					}
+				}
+			
+			</script>
+
+			<div id="list">
+				{% block bodycontent %}
+				<p>
+				<table>
+					<tr>
+						<th>Latitude</th>
+						<th>Longitude</th>
+						<th>Distance</th>
+					</tr>
+					{% for value in lati_longi %}
+					<tr>
+						<td>{{ value.Latitude }}</td>
+						<td>{{ value.Longitude }}</td>
+						<td>
+
+						</td>
+					</tr>
+					{% endfor %}
+				</table>
+				{% endblock %}
+			</div>
+			
+            <div class="cleaner_h20">&nbsp;</div>
+            
+            <div class="right_column_content_section_01">
+            	<div class="right_column_2col margin_right_60">
+                	<div class="content_haeder_02">
+                    	Our Services</div>
+                    <p>Application and Web Development : </p>
+                    <ul>
+                    	<li><a href="https://github.com/tiwagaki/rad_assignment2">Our GitHub Home</a></li>
+                    	<li><a href="https://data.gov.sg/group/transport">Taxi Location Web Services</a></li>
+                    </ul>
+                </div>
+                
+                <div class="right_column_2col">
+                	<div class="content_haeder_03">Our Visions</div>
+                    <p>We aspire to make your taxi search easier with our app</p>
+                    <ul>
+               	    	<li>Know Ahead of nearest taxi locations</li>
+                        <li>Reduce waiting time</li>
+                        <li>Finding cab at peak hours</li>
+                    </ul>
+                </div>
+                
+                <div class="cleaner">&nbsp;</div>
+            </div>
+            
+            <div class="cleaner_h30">&nbsp;</div>
+			</div> <!-- end of right column content -->
+			<div class="cleaner">&nbsp;</div>
+    
+			</div> <!-- end of right column -->
+			<div class="cleaner">&nbsp;</div> 
+			<div id="templatemo_footer"> Copyright © 2016
+		</div>	
+	</div> <!-- end of container -->
+</body>
+</html>
+{% endautoescape %}
